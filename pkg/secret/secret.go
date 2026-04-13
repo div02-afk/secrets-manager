@@ -1,7 +1,7 @@
 package secret
 
 import (
-	encryptionprovider "github.com/div02-afk/secrets-manager/pkg/encryption-provider"
+	encryptionprovider "github.com/div02-afk/secrets-manager/pkg/encryption"
 	"github.com/div02-afk/secrets-manager/pkg/kms"
 	"github.com/div02-afk/secrets-manager/pkg/storage"
 )

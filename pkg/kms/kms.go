@@ -1,9 +1,9 @@
 package kms
 
-import encryptionprovider "github.com/div02-afk/secrets-manager/pkg/encryption-provider"
+import encryptionprovider "github.com/div02-afk/secrets-manager/pkg/encryption"
 
 type KMS struct {
-	masterKey []byte
+	masterKey          []byte
 	encryptionprovider encryptionprovider.EncrpytionProvider
 }
 
