@@ -20,13 +20,13 @@ func NewSecretService(kms kms.KMSClient, storage storage.Storage, encryptionProv
 	}
 }
 
-func (s *SecretService) Get(tenantID []byte, secretKey string, version *uint8) ([]byte, error) {
+func (s *SecretService) Get(tenantID int64, secretKey string, version *int) ([]byte, error) {
 	secretEntry, err := s.storage.GetSecretValue(tenantID, secretKey, version)
 	if err != nil {
 		return nil, err
 	}
 
-	decryptedDEK, _, err := s.getDecryptedDEKforTenet(tenantID, &secretEntry.DEKVersion)
+	decryptedDEK, _, err := s.getDecryptedDEKForTenant(tenantID, &secretEntry.DEKVersion)
 	if err != nil {
 		return nil, err
 	}
@@ -39,8 +39,8 @@ func (s *SecretService) Get(tenantID []byte, secretKey string, version *uint8) (
 	return decryptedSecretValue, nil
 }
 
-func (s *SecretService) Add(tenantID []byte, secretKey string, secretValue []byte) (uint8, error) {
-	decryptedDEK, DEKVersion, err := s.getDecryptedDEKforTenet(tenantID, nil)
+func (s *SecretService) Add(tenantID int64, secretKey string, secretValue []byte) (int, error) {
+	decryptedDEK, DEKVersion, err := s.getDecryptedDEKForTenant(tenantID, nil)
 	if err != nil {
 		return 0, err
 	}
@@ -57,7 +57,7 @@ func (s *SecretService) Add(tenantID []byte, secretKey string, secretValue []byt
 	return version, nil
 }
 
-func (s *SecretService) getDecryptedDEKforTenet(tenantID []byte, DEKVersion *uint8) ([]byte, uint8, error) {
+func (s *SecretService) getDecryptedDEKForTenant(tenantID int64, DEKVersion *int) ([]byte, int, error) {
 	DEKEntry, err := s.storage.GetDEK(tenantID, DEKVersion)
 	if err != nil {
 		return nil, 0, err

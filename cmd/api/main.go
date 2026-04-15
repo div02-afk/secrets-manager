@@ -32,7 +32,7 @@ func main() {
 			http.Error(w, "invalid request", http.StatusBadRequest)
 			return
 		}
-		version, err := secretService.Add(req.TenetID, req.SecretKey, req.SecretValue)
+		version, err := secretService.Add(req.TenantID, req.SecretKey, req.SecretValue)
 		if err != nil {
 			log.Println("Add Failed with error: ", err)
 			http.Error(w, "New Secret Add failed", http.StatusBadRequest)
