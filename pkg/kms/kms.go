@@ -1,18 +1,31 @@
 package kms
 
-import encryptionprovider "github.com/div02-afk/secrets-manager/pkg/encryption"
+import (
+	encryptionprovider "github.com/div02-afk/secrets-manager/pkg/encryption"
+)
 
 type KMS struct {
 	masterKey          []byte
-	encryptionprovider encryptionprovider.EncrpytionProvider
+	encryptionProvider encryptionprovider.EncrpytionProvider
 }
+
+
 
 func (k *KMS) Encrypt(DEK []byte) ([]byte, error) {
 	// TODO: implement encryption logic
-	return nil, nil
+	cipherTextDEK, err := k.encryptionProvider.Encrypt(k.masterKey, DEK)
+	if err != nil {
+		return nil, err
+	}
+
+	return cipherTextDEK, nil
 }
 
 func (k *KMS) Decrypt(encryptedDEK []byte) ([]byte, error) {
-	//TODO: implement decryption logic
-	return nil, nil
+	plainTextDEK, err := k.encryptionProvider.Decrypt(k.masterKey, encryptedDEK)
+	if err != nil {
+		return nil, err
+	}
+
+	return plainTextDEK, nil
 }

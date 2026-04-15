@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+option go_package = "./proto";
+
+package kms;
+
+
+// KMS service provides encryption and decryption operations for data encryption keys.
+service KMS {
+  // Encrypts a data encryption key using the KMS.
+  rpc Encrypt (EncryptRequest) returns (EncryptResponse);
+  // Decrypts an encrypted data encryption key using the KMS.
+  rpc Decrypt (DecryptRequest) returns (DecryptResponse);
+}
+
+message EncryptRequest {
+  bytes dek = 1;
+}
+
+message EncryptResponse {
+  bytes encrypted_dek = 1;
+}
+
+message DecryptRequest {
+  bytes encrypted_dek = 1;
+}
+
+message DecryptResponse {
+  bytes dek = 1;
+}

@@ -1,4 +1,4 @@
-package encryptionprovider
+package encryption
 
 type EncrpytionProvider interface {
 	Encrypt(key []byte,payload []byte) ([]byte,error)

@@ -1,0 +1,41 @@
+CREATE TABLE IF NOT EXISTS TENENTS {
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+}
+
+CREATE TABLE IF NOT EXISTS AUTH {
+    id SERIAL PRIMARY KEY,
+    tenant_id INTEGER NOT NULL,
+    api_key VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (tenant_id) REFERENCES TENENTS(id) ON DELETE CASCADE
+    CONSTRAINT UNIQUE (tenant_id, api_key)
+}
+
+CREATE TABLE IF NOT EXISTS SECRETS {
+    id SERIAL PRIMARY KEY,
+    tenant_id INTEGER NOT NULL,
+    secret_key VARCHAR(255) NOT NULL,
+    secret_value TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    dek_version INTEGER NOT NULL,
+    version INTEGER NOT NULL,
+    FOREIGN KEY (tenant_id) REFERENCES TENENTS(id) ON DELETE CASCADE,
+    CONSTRAINT UNIQUE (tenant_id, secret_key, version)
+}
+
+CREATE TABLE IF NOT EXISTS DEKS {
+    id SERIAL PRIMARY KEY,
+    tenant_id INTEGER NOT NULL,
+    dek VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    version INTEGER NOT NULL,
+    FOREIGN KEY (tenant_id) REFERENCES TENENTS(id) ON DELETE CASCADE,
+    CONSTRAINT UNIQUE (tenant_id, version)
+}
+
+
+CREATE OR REPLACE INDEX idx_auth_tenant_id ON AUTH(tenant_id,api_key);
+CREATE OR REPLACE INDEX idx_secrets_tenant_id ON SECRETS(tenant_id,secret_key,version);
+CREATE OR REPLACE INDEX idx_deks_tenant_id ON DEKS(tenant_id,version);
