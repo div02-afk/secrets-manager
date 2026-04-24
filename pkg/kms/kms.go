@@ -1,12 +1,21 @@
 package kms
 
 import (
+	"os"
+
 	encryptionprovider "github.com/div02-afk/secrets-manager/pkg/encryption"
 )
 
 type KMS struct {
 	masterKey          []byte
 	encryptionProvider encryptionprovider.EncrpytionProvider
+}
+
+func CreateKMSProvider(e encryptionprovider.EncrpytionProvider) *KMS{
+	return &KMS{
+		masterKey: []byte(os.Getenv("MASTER_KEY")),
+		encryptionProvider: e,
+	}
 }
 
 

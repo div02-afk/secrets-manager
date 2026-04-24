@@ -1,0 +1,19 @@
+.env
+
+# Go build artifacts
+bin/
+dist/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Go test binaries and coverage
+*.test
+*.out
+coverage.out
+
+
+.env
+tmp

@@ -2,15 +2,15 @@ package storage
 
 import (
 	"database/sql"
-	"errors"
+	"log"
 	"os"
+
+	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
 type PostgresStorage struct {
 	db *sql.DB
 }
-
-var errNotImplemented = errors.New("postgres storage: not implemented")
 
 func connectToDB(conn string) (*sql.DB, error) {
 	db, err := sql.Open("pgx", conn)
@@ -29,6 +29,8 @@ func NewPostgresStorage() *PostgresStorage {
 	if err != nil {
 		panic(err)
 	}
+
+	
 	return &PostgresStorage{
 		db: db,
 	}
@@ -80,7 +82,7 @@ func (pg *PostgresStorage) ValidateAuth(tenantID int64, apiKey string) (bool, er
 	if err != nil {
 		return false, err
 	}
-
+	log.Printf("api-key validation count: %d",count)
 	if count != 1 {
 		return false, nil
 	}
